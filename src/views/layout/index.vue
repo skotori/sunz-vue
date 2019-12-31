@@ -123,8 +123,15 @@ export default {
       this.$router.push(tab.name)
     },
     logout () {
-      this.$store.dispatch('logout').then(() => {
-        window.location.reload()
+      this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('logout').then(() => {
+          window.location.reload()
+        })
+      }).catch(() => {
       })
     }
   }
@@ -174,13 +181,21 @@ export default {
   border-bottom: solid 1px #e6e6e6;
 }
 
-/* 重写element标签页样式 */
-.el-tabs__header {
-  margin: 0px;
-}
-
 .el-main {
   padding: 0px;
+}
+
+/* 重写element标签页样式 */
+.el-tabs {
+  height: 100%;
+}
+
+.el-tabs__header {
+  margin-bottom: 10px;
+}
+
+.el-tabs__content {
+  height: calc(100% - 51px);
 }
 
 .el-footer {

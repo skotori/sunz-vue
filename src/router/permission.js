@@ -10,12 +10,32 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') { // 已经登录的不准跳转登录页面
       next('/')
     } else {
-      let cacheMenu = JSON.parse(window.localStorage.getItem('menu'))
+      let cacheUser = JSON.parse(window.sessionStorage.getItem('user'))
+      let cacheMenu = JSON.parse(window.sessionStorage.getItem('menu'))
       let storeMenu = store.state.menu.menu
-      if (cacheMenu && storeMenu) { // 缓存和vuex里都有routes，放行
-        if (to.name === 'notFound') {
+      if (cacheUser && !cacheMenu && !storeMenu) { // 缓存里有user，但是没有menu，并且vuex里也没有menu，说明才登录，需要从后端获取目录，然后再添加路由
+        store.dispatch('getMenu').then(menu => {
+          let routes = generateRoutes(menu)
+          router.addRoutes(routes)
+          next({ ...to, replace: true })
+        })
+      } else if (cacheUser && cacheMenu && !storeMenu) { // 缓存里有user和menu，但是vuex里没有menu，说明页面刷新了，需要从缓存获取目录，然后再添加路由
+        let routes = generateRoutes(store.getters.getMenu)
+        router.addRoutes(routes)
+        next({ ...to, replace: true })
+      } else if (!cacheUser && !cacheMenu && !storeMenu) { // 缓存里没有user，也没有menu，并且vuex里也没有menu，说明页面关闭后重启了，需要从后端获取用户信息和目录，然后再添加路由
+        store.dispatch('getUser').then(() => {
+          store.dispatch('getMenu').then(menu => {
+            let routes = generateRoutes(menu)
+            router.addRoutes(routes)
+            next({ ...to, replace: true })
+          })
+        })
+      } else if (cacheUser && cacheMenu && storeMenu) { // 都在，正常放行
+        if (to.name === 'notFound') { // 404页面不添加进标签页
+          NProgress.done()
           next()
-        } else {
+        } else { // 其他页面添加进标签页
           let tab = {
             title: to.meta.chineseName,
             name: to.name
@@ -25,20 +45,11 @@ router.beforeEach((to, from, next) => {
             next()
           })
         }
-      } else if (!cacheMenu && !storeMenu) { // 缓存和vuex里都没有routes，先请求后端拿到目录，然后再添加路由
-        store.dispatch('getMenu').then(menu => {
-          let routes = generateRoutes(menu)
-          router.addRoutes(routes)
-          next({ ...to, replace: true })
-        })
-      } else if (cacheMenu && !storeMenu) { // 缓存里有routes，vuex里没有routes，说明页面刷新了，重新添加一次路由
-        let routes = generateRoutes(store.getters.getMenu)
-        router.addRoutes(routes)
-        next({ ...to, replace: true })
       }
     }
   } else { // 缓存里没有token，说明没有登录
     if (to.path === '/login') { // 登录路由放行
+      NProgress.done()
       next()
     } else { // 其他路由跳转到登录页面
       next('/login')

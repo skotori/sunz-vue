@@ -8,6 +8,13 @@ export function login (user) {
   })
 }
 
+export function getUser () {
+  return axios({
+    url: '/sysUser/userInfo',
+    method: 'get'
+  })
+}
+
 export function getMenu () {
   return axios({
     url: '/sysPower/menuTree',

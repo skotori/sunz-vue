@@ -75,6 +75,10 @@ export default {
           this.$store.dispatch('login', this.loginForm).then(() => {
             this.loading = false
             this.$router.push('/')
+            this.$message({
+              type: 'success',
+              message: '登录成功!'
+            })
           })
         } else {
           this.$message.error('账号或密码不能为空')

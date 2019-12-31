@@ -1,3 +1,5 @@
+import { getUser } from '../api/login'
+
 const user = {
   state: {
     user: undefined
@@ -5,7 +7,7 @@ const user = {
   getters: {
     getUser (state) {
       if (!state.user) {
-        state.user = JSON.parse(window.localStorage.getItem('user'))
+        state.user = JSON.parse(window.sessionStorage.getItem('user'))
       }
       return state.user
     }
@@ -13,14 +15,24 @@ const user = {
   mutations: {
     setUser (state, user) {
       state.user = user
-      window.localStorage.setItem('user', JSON.stringify(user))
+      window.sessionStorage.setItem('user', JSON.stringify(user))
     },
     removeUser (state) {
       state.user = undefined
-      window.localStorage.removeItem('user')
+      window.sessionStorage.removeItem('user')
     }
   },
   actions: {
+    getUser (context) {
+      return new Promise(resolve => {
+        getUser().then(res => {
+          if (res.data) {
+            context.commit('setUser', res.data)
+            resolve()
+          }
+        })
+      })
+    }
   }
 }
 

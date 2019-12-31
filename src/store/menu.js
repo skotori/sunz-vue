@@ -7,7 +7,7 @@ const menu = {
   getters: {
     getMenu (state) {
       if (!state.menu) {
-        state.menu = JSON.parse(window.localStorage.getItem('menu'))
+        state.menu = JSON.parse(window.sessionStorage.getItem('menu'))
       }
       return state.menu
     }
@@ -15,19 +15,21 @@ const menu = {
   mutations: {
     setMenu (state, menu) {
       state.menu = menu
-      window.localStorage.setItem('menu', JSON.stringify(menu))
+      window.sessionStorage.setItem('menu', JSON.stringify(menu))
     },
     removeMenu (state) {
       state.menu = undefined
-      window.localStorage.removeItem('menu')
+      window.sessionStorage.removeItem('menu')
     }
   },
   actions: {
     getMenu (context) {
       return new Promise(resolve => {
         getMenu().then(res => {
-          context.commit('setMenu', res.data)
-          resolve(res.data)
+          if (res.data) {
+            context.commit('setMenu', res.data)
+            resolve(res.data)
+          }
         })
       })
     }
