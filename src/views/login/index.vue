@@ -14,7 +14,6 @@
         <el-form-item prop="password">
           <el-input v-model="loginForm.password"
                     type="password"
-                    autocomplete="off"
                     placeholder="请输入密码"
                     prefix-icon="el-icon-key"></el-input>
         </el-form-item>
@@ -69,7 +68,7 @@ export default {
   },
   methods: {
     login () {
-      this.$refs['loginForm'].validate((valid) => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true
           this.$store.dispatch('login', this.loginForm).then(() => {

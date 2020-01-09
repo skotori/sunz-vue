@@ -26,7 +26,7 @@ const user = {
     getUser (context) {
       return new Promise(resolve => {
         getUser().then(res => {
-          if (res.data) {
+          if (res) {
             context.commit('setUser', res.data)
             resolve()
           }

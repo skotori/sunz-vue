@@ -21,7 +21,11 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(response => {
   const res = response.data
-  if (res.code !== 1) {
+  if (res.code === 70002) {
+    store.dispatch('logout').then(() => {
+      window.location.reload()
+    })
+  } else if (res.code !== 1) {
     Message({
       message: res.msg,
       type: 'error',

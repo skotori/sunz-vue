@@ -26,7 +26,7 @@ const menu = {
     getMenu (context) {
       return new Promise(resolve => {
         getMenu().then(res => {
-          if (res.data) {
+          if (res) {
             context.commit('setMenu', res.data)
             resolve(res.data)
           }

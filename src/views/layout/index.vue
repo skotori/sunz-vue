@@ -191,11 +191,11 @@ export default {
 }
 
 .el-tabs__header {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .el-tabs__content {
-  height: calc(100% - 51px);
+  height: calc(100% - 41px);
 }
 
 .el-footer {

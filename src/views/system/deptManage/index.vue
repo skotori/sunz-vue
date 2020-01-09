@@ -1,10 +1,10 @@
 <template>
-  <div>字典管理</div>
+  <div>部门管理</div>
 </template>
 
 <script>
 export default {
-  name: 'dict'
+  name: 'deptManage'
 }
 </script>
 

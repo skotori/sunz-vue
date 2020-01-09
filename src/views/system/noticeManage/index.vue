@@ -1,10 +1,10 @@
 <template>
-  <div>部门管理</div>
+  <div>通知管理</div>
 </template>
 
 <script>
 export default {
-  name: 'dept'
+  name: 'noticeManage'
 }
 </script>
 

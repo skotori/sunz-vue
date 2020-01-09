@@ -26,7 +26,7 @@ const token = {
     login (context, user) {
       return new Promise(resolve => {
         login(user).then(res => {
-          if (res.data) {
+          if (res) {
             context.commit('setToken', res.data.token)
             context.commit('setUser', res.data.user)
             resolve()
