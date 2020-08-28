@@ -17,7 +17,7 @@ export function getUser () {
 
 export function getMenu () {
   return axios({
-    url: '/sysPower/menuTree',
+    url: '/sysPower/menuTreeList',
     method: 'get'
   })
 }

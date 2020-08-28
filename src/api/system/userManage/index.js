@@ -17,7 +17,7 @@ export function userInfoById (id) {
 
 export function deptList () {
   return axios({
-    url: '/sysDept/list',
+    url: '/sysDept/queryList',
     method: 'post',
     data: {}
   })
@@ -25,7 +25,7 @@ export function deptList () {
 
 export function roleList () {
   return axios({
-    url: '/sysRole/list',
+    url: '/sysRole/queryList',
     method: 'post',
     data: {}
   })

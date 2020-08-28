@@ -21,10 +21,10 @@
              class="collapseIcon"
              @click="handleCollapse"></i>
           <el-dropdown trigger="click">
-            <el-avatar :src="user.avatar"
+            <el-avatar :src="user.icon"
                        :size="30"
                        @error="true"
-                       class="avatar">
+                       class="icon">
               <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
             </el-avatar>
             <el-dropdown-menu slot="dropdown"
@@ -77,13 +77,13 @@ export default {
   },
   mounted () {
     this.menu = this.$store.getters.getMenu
-    this.active = this.$route.name
+    this.active = this.$route.path
     this.tabs = this.$store.getters.getTabs
     this.user = this.$store.getters.getUser
   },
   watch: {
     $route (to, from) {
-      this.active = this.$route.name
+      this.active = this.$route.path
       this.tabs = this.$store.getters.getTabs
     }
   },
@@ -108,7 +108,7 @@ export default {
         if (!tabs.length) {
           let tab = {
             title: '仪表盘',
-            name: 'dashboard'
+            name: '/dashboard'
           }
           this.$store.dispatch('addTab', tab).then(() => {
             this.$router.push('/dashboard')
@@ -167,7 +167,7 @@ export default {
   margin: 10px;
 }
 
-.avatar {
+.icon {
   cursor: pointer;
   margin: 10px;
 }

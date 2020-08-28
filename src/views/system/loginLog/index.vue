@@ -1,5 +1,5 @@
 <template>
-  <div>登录日志管理</div>
+  <div>登录日志</div>
 </template>
 
 <script>

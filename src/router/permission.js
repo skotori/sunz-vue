@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
         } else { // 其他页面添加进标签页
           let tab = {
             title: to.meta.chineseName,
-            name: to.name
+            name: to.path
           }
           store.dispatch('addTab', tab).then(() => { // 添加标签页
             NProgress.done()
@@ -74,22 +74,17 @@ function generateRoutes (menu) {
       menus.push(item)
     }
   })
+
   let routes = []
   menus.forEach(item => {
-    let route = {
-      id: item.id,
+    routes.push({
       path: item.path,
       name: item.code,
-      component: undefined,
-      icon: item.icon,
+      component: require('../views' + item.path + '/index.vue').default,
       meta: {
         chineseName: item.name
       }
-    }
-    if (item.component) {
-      route.component = require('../views' + item.component + '.vue').default
-    }
-    routes.push(route)
+    })
   })
   routes = [{
     path: '/',
@@ -110,13 +105,13 @@ function generateRoutes (menu) {
  * @param {Array} menu menu树
  */
 function findChildren (menu) {
-  let routes = []
+  let menus = []
   menu.forEach(item => {
     if (item.children) {
-      routes.concat(findChildren(item.children))
+      menus.concat(findChildren(item.children))
     } else {
-      routes.push(item)
+      menus.push(item)
     }
   })
-  return routes
+  return menus
 }

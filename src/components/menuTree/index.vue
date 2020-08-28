@@ -1,6 +1,6 @@
 <template>
   <el-submenu v-if="menu.children"
-              :index="menu.code">
+              :index="menu.path">
     <template slot="title">
       <i :class="menu.icon"></i>
       <span slot="title">{{menu.name}}</span>
@@ -10,7 +10,7 @@
               :menu="item"></menuTree>
   </el-submenu>
   <el-menu-item v-else
-                :index="menu.code">
+                :index="menu.path">
     <i :class="menu.icon"></i>
     <span slot="title">{{menu.name}}</span>
   </el-menu-item>

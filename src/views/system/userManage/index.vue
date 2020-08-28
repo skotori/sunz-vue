@@ -2,104 +2,103 @@
   <div class="userManagePage">
     <div class="headBlock">
       <div class="searchBlock">
-        <el-input
-          placeholder="请输入账号或者名称"
-          v-model="searchKeyword"
-          clearable
-          @change="search"
-          size="mini"
-          class="searchKeyword">
+        <el-input placeholder="请输入账号或者名称"
+                  v-model="searchKeyword"
+                  clearable
+                  @change="search"
+                  size="mini"
+                  class="searchKeyword">
         </el-input>
-        <el-select v-model="searchDept" clearable placeholder="请选择部门" @change="search" size="mini" class="searchDept">
-          <el-option
-            v-for="item in deptList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id">
+        <el-select v-model="searchDept"
+                   clearable
+                   placeholder="请选择部门"
+                   @change="search"
+                   size="mini"
+                   class="searchDept">
+          <el-option v-for="item in deptList"
+                     :key="item.id"
+                     :label="item.name"
+                     :value="item.id">
           </el-option>
         </el-select>
-        <el-select v-model="searchStatus" clearable placeholder="请选择状态" @change="search" size="mini" class="searchStatus">
-          <el-option label="启用" :value="1"></el-option>
-          <el-option label="禁用" :value="2"></el-option>
+        <el-select v-model="searchDisabledState"
+                   clearable
+                   placeholder="请选择禁用状态"
+                   @change="search"
+                   size="mini"
+                   class="searchDisabledState">
+          <el-option label="未禁用"
+                     :value="0"></el-option>
+          <el-option label="已禁用"
+                     :value="1"></el-option>
         </el-select>
       </div>
       <el-button type="success"
-                  @click="addVisible = true"
-                  icon="el-icon-plus"
-                  size="mini"
-                  round>新 增</el-button>
+                 @click="addVisible = true"
+                 icon="el-icon-plus"
+                 size="mini"
+                 round>新 增</el-button>
     </div>
 
-    <el-table
-      :data="userList"
-      border
-      style="width: 100%"
-      v-loading="tableLoading"
-      :row-class-name="rowClassName">
-      <el-table-column
-        fixed
-        prop="id"
-        label="id"
-        width="50">
+    <el-table :data="userList"
+              border
+              style="width: 100%"
+              v-loading="tableLoading"
+              :row-class-name="rowClassName">
+      <el-table-column fixed
+                       prop="id"
+                       label="id"
+                       width="50">
       </el-table-column>
-      <el-table-column
-        prop="account"
-        label="账号"
-        width="100">
+      <el-table-column prop="account"
+                       label="账号"
+                       width="100">
       </el-table-column>
-      <el-table-column
-        prop="name"
-        label="名称"
-        width="100">
+      <el-table-column prop="name"
+                       label="名称"
+                       width="100">
       </el-table-column>
-      <el-table-column
-        prop="avatar"
-        label="头像"
-        width="100">
+      <el-table-column prop="icon"
+                       label="头像"
+                       width="100">
         <template slot-scope="scope">
-          <el-avatar :src="scope.row.avatar"
-                      :size="30"
-                      @error="true">
+          <el-avatar :src="scope.row.icon"
+                     :size="30"
+                     @error="true">
             <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
           </el-avatar>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="sex"
-        label="性别"
-        width="100">
+      <el-table-column prop="sex"
+                       label="性别"
+                       width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.sex === 1 ? '男' : '女' }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="birthday"
-        label="生日"
-        width="200">
+      <el-table-column prop="birthday"
+                       label="生日"
+                       width="200">
         <template slot-scope="scope">
           {{ birthdayFormat(scope.row.birthday) }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop="email"
-        label="邮箱"
-        width="200">
+      <el-table-column prop="email"
+                       label="邮箱"
+                       width="200">
       </el-table-column>
-      <el-table-column
-        prop="phone"
-        label="电话"
-        width="200">
+      <el-table-column prop="tell"
+                       label="电话"
+                       width="200">
       </el-table-column>
-      <el-table-column
-        prop="deptName"
-        label="部门"
-        width="100">
+      <el-table-column prop="deptName"
+                       label="部门"
+                       width="100">
       </el-table-column>
-      <el-table-column
-        prop="roles"
-        label="角色"
-        width="200"
-        :show-overflow-tooltip="true">
+      <el-table-column prop="roles"
+                       label="角色"
+                       width="200"
+                       :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <el-tag v-for="item in scope.row.roles"
                   :key="item.id"
@@ -110,165 +109,193 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="status"
-        label="状态"
-        width="100">
+      <el-table-column prop="disabledState"
+                       label="禁用状态"
+                       width="100">
         <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.status === 1 ? '' : 'danger'"
-            size="mini"
-            disable-transitions>
-            {{ scope.row.status === 1 ? '启用' : '禁用' }}
+          <el-tag :type="scope.row.disabledState === 1 ? 'danger' : ''"
+                  size="mini"
+                  disable-transitions>
+            {{ scope.row.disabledState === 1 ? '已禁用' : '未禁用' }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="note"
-        label="备注"
-        width="200">
+      <el-table-column prop="remark"
+                       label="备注"
+                       width="200">
       </el-table-column>
-      <el-table-column
-        prop="createTime"
-        label="创建时间"
-        width="200">
+      <el-table-column prop="createTime"
+                       label="创建时间"
+                       width="200">
       </el-table-column>
-      <el-table-column
-        prop="createUser"
-        label="创建人"
-        width="100">
+      <el-table-column prop="createUser"
+                       label="创建人"
+                       width="100">
       </el-table-column>
-      <el-table-column
-        prop="updateTime"
-        label="更新时间"
-        width="200">
+      <el-table-column prop="updateTime"
+                       label="更新时间"
+                       width="200">
       </el-table-column>
-      <el-table-column
-        prop="updateUser"
-        label="更新人"
-        width="100">
+      <el-table-column prop="updateUser"
+                       label="更新人"
+                       width="100">
       </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="200">
+      <el-table-column fixed="right"
+                       label="操作"
+                       width="200">
         <template slot-scope="scope">
-          <el-button @click="openDrawer(scope.row)" type="primary" size="mini" icon="el-icon-edit" round>编 辑</el-button>
-          <el-popconfirm
-            title="确定删除此用户吗?"
-            @onConfirm="deleteUser(scope.row)"
-            class="deleteButton">
-            <el-button slot="reference" type="danger" size="mini" icon="el-icon-delete" round>删 除</el-button>
+          <el-button @click="openDrawer(scope.row)"
+                     type="primary"
+                     size="mini"
+                     icon="el-icon-edit"
+                     round>编 辑</el-button>
+          <el-popconfirm title="确定删除此用户吗?"
+                         @onConfirm="deleteUser(scope.row)"
+                         class="deleteButton">
+            <el-button slot="reference"
+                       type="danger"
+                       size="mini"
+                       icon="el-icon-delete"
+                       round>删 除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="pageTotal">
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="pageNum"
+                   :page-sizes="[10, 20, 30, 40]"
+                   :page-size="pageSize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="pageTotal">
     </el-pagination>
 
-    <el-dialog
-      title="新增用户"
-      :visible.sync="addVisible"
-      :show-close="false"
-      width="1000px"
-      :close-on-click-modal="false">
-      <el-form ref="addForm" :model="addForm" label-width="100px" status-icon :rules="addRules" size="mini">
+    <el-dialog title="新增用户"
+               :visible.sync="addVisible"
+               :show-close="false"
+               width="1000px"
+               :close-on-click-modal="false">
+      <el-form ref="addForm"
+               :model="addForm"
+               label-width="100px"
+               status-icon
+               :rules="addRules"
+               size="mini">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="账号" prop="account">
-              <el-input v-model="addForm.account" placeholder="请输入账号"></el-input>
+            <el-form-item label="账号"
+                          prop="account">
+              <el-input v-model="addForm.account"
+                        placeholder="请输入账号"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="addForm.password" placeholder="请输入密码"></el-input>
+            <el-form-item label="密码"
+                          prop="password">
+              <el-input type="password"
+                        v-model="addForm.password"
+                        placeholder="请输入密码"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="确认密码" prop="checkPassword">
-              <el-input type="password" v-model="addForm.checkPassword" placeholder="请再次输入密码"></el-input>
+            <el-form-item label="确认密码"
+                          prop="checkPassword">
+              <el-input type="password"
+                        v-model="addForm.checkPassword"
+                        placeholder="请再次输入密码"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="addForm.name" placeholder="请输入名称"></el-input>
+            <el-form-item label="名称"
+                          prop="name">
+              <el-input v-model="addForm.name"
+                        placeholder="请输入名称"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="16">
-            <el-form-item label="头像" prop="avatar">
-              <div class="avatarBlock">
-                <el-avatar :src="addForm.avatar"
-                            :size="30"
-                            @error="true">
+            <el-form-item label="头像"
+                          prop="icon">
+              <div class="iconBlock">
+                <el-avatar :src="addForm.icon"
+                           :size="30"
+                           @error="true">
                   <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                 </el-avatar>
-                <el-input v-model="addForm.avatar" placeholder="请输入头像图片链接" class="avatarUrl"></el-input>
+                <el-input v-model="addForm.icon"
+                          placeholder="请输入头像图片链接"
+                          class="iconUrl"></el-input>
               </div>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="性别" prop="sex">
+            <el-form-item label="性别"
+                          prop="sex">
               <template>
-                <el-radio v-model="addForm.sex" :label="1">男</el-radio>
-                <el-radio v-model="addForm.sex" :label="2">女</el-radio>
+                <el-radio v-model="addForm.sex"
+                          :label="1">男</el-radio>
+                <el-radio v-model="addForm.sex"
+                          :label="2">女</el-radio>
               </template>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="生日" prop="birthday">
-              <el-date-picker
-                v-model="addForm.birthday"
-                type="date"
-                placeholder="请选择生日"
-                value-format="yyyy-MM-dd"
-                clearable>
+            <el-form-item label="生日"
+                          prop="birthday">
+              <el-date-picker v-model="addForm.birthday"
+                              type="date"
+                              placeholder="请选择生日"
+                              value-format="yyyy-MM-dd"
+                              clearable>
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="addForm.email" placeholder="请输入邮箱"></el-input>
+            <el-form-item label="邮箱"
+                          prop="email">
+              <el-input v-model="addForm.email"
+                        placeholder="请输入邮箱"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="电话" prop="phone">
-              <el-input v-model="addForm.phone" placeholder="请输入电话"></el-input>
+            <el-form-item label="电话"
+                          prop="tell">
+              <el-input v-model="addForm.tell"
+                        placeholder="请输入电话"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="部门" prop="deptId">
-              <el-select v-model="addForm.deptId" clearable placeholder="请选择部门">
-                <el-option
-                  v-for="item in deptList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
+            <el-form-item label="部门"
+                          prop="deptId">
+              <el-select v-model="addForm.deptId"
+                         clearable
+                         placeholder="请选择部门">
+                <el-option v-for="item in deptList"
+                           :key="item.id"
+                           :label="item.name"
+                           :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="角色" prop="roles">
-              <el-select v-model="addForm.roles" multiple clearable value-key="id" placeholder="请选择角色">
-                <el-option
-                  v-for="item in roleList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item">
+            <el-form-item label="角色"
+                          prop="roles">
+              <el-select v-model="addForm.roles"
+                         multiple
+                         clearable
+                         value-key="id"
+                         placeholder="请选择角色">
+                <el-option v-for="item in roleList"
+                           :key="item.id"
+                           :label="item.name"
+                           :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -276,26 +303,26 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="状态" prop="status">
-              <el-switch
-                v-model="addForm.status"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                :active-value="1"
-                :inactive-value="2">
+            <el-form-item label="禁用状态"
+                          prop="disabledState">
+              <el-switch v-model="addForm.disabledState"
+                         active-color="#FF4949"
+                         inactive-color="#C0CCDA"
+                         :active-value="1"
+                         :inactive-value="0">
               </el-switch>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="备注" prop="note">
-              <el-input
-                type="textarea"
-                resize="none"
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="请输入备注"
-                v-model="addForm.note">
+            <el-form-item label="备注"
+                          prop="remark">
+              <el-input type="textarea"
+                        resize="none"
+                        :autosize="{ minRows: 2, maxRows: 4}"
+                        placeholder="请输入备注"
+                        v-model="addForm.remark">
               </el-input>
             </el-form-item>
           </el-col>
@@ -303,95 +330,119 @@
       </el-form>
       <span slot="footer">
         <el-button @click="addVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button type="primary"
+                   @click="add">确 定</el-button>
       </span>
     </el-dialog>
 
-    <el-drawer
-      :title="updateTitle"
-      :visible.sync="updateVisible"
-      direction="rtl"
-      size="500px"
-      :show-close="false"
-      :wrapperClosable="false">
+    <el-drawer :title="updateTitle"
+               :visible.sync="updateVisible"
+               direction="rtl"
+               size="500px"
+               :show-close="false"
+               :wrapperClosable="false">
       <div class="drawerContent">
-        <el-form ref="updateForm" :model="updateForm" label-width="60px" status-icon :rules="updateRules" size="mini">
-          <el-form-item label="名称" prop="name">
-            <el-input v-model="updateForm.name" placeholder="请输入名称"></el-input>
+        <el-form ref="updateForm"
+                 :model="updateForm"
+                 label-width="60px"
+                 status-icon
+                 :rules="updateRules"
+                 size="mini">
+          <el-form-item label="名称"
+                        prop="name">
+            <el-input v-model="updateForm.name"
+                      placeholder="请输入名称"></el-input>
           </el-form-item>
-          <el-form-item label="头像" prop="avatar">
-            <div class="avatarBlock">
-              <el-avatar :src="updateForm.avatar"
-                          :size="30"
-                          @error="true">
+          <el-form-item label="头像"
+                        prop="icon">
+            <div class="iconBlock">
+              <el-avatar :src="updateForm.icon"
+                         :size="30"
+                         @error="true">
                 <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
               </el-avatar>
-              <el-input v-model="updateForm.avatar" placeholder="请输入头像图片链接" class="avatarUrl"></el-input>
+              <el-input v-model="updateForm.icon"
+                        placeholder="请输入头像图片链接"
+                        class="iconUrl"></el-input>
             </div>
           </el-form-item>
-          <el-form-item label="性别" prop="sex">
+          <el-form-item label="性别"
+                        prop="sex">
             <template>
-              <el-radio v-model="updateForm.sex" :label="1">男</el-radio>
-              <el-radio v-model="updateForm.sex" :label="2">女</el-radio>
+              <el-radio v-model="updateForm.sex"
+                        :label="1">男</el-radio>
+              <el-radio v-model="updateForm.sex"
+                        :label="2">女</el-radio>
             </template>
           </el-form-item>
-          <el-form-item label="生日" prop="birthday">
-            <el-date-picker
-              v-model="updateForm.birthday"
-              type="date"
-              placeholder="请选择生日"
-              value-format="yyyy-MM-dd"
-              clearable>
+          <el-form-item label="生日"
+                        prop="birthday">
+            <el-date-picker v-model="updateForm.birthday"
+                            type="date"
+                            placeholder="请选择生日"
+                            value-format="yyyy-MM-dd"
+                            clearable>
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="updateForm.email" placeholder="请输入邮箱"></el-input>
+          <el-form-item label="邮箱"
+                        prop="email">
+            <el-input v-model="updateForm.email"
+                      placeholder="请输入邮箱"></el-input>
           </el-form-item>
-          <el-form-item label="电话" prop="phone">
-            <el-input v-model="updateForm.phone" placeholder="请输入电话"></el-input>
+          <el-form-item label="电话"
+                        prop="tell">
+            <el-input v-model="updateForm.tell"
+                      placeholder="请输入电话"></el-input>
           </el-form-item>
-          <el-form-item label="部门" prop="deptId">
-            <el-select v-model="updateForm.deptId" clearable placeholder="请选择部门">
-              <el-option
-                v-for="item in deptList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
+          <el-form-item label="部门"
+                        prop="deptId">
+            <el-select v-model="updateForm.deptId"
+                       clearable
+                       placeholder="请选择部门">
+              <el-option v-for="item in deptList"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="角色" prop="roles">
-            <el-select v-model="updateForm.roles" multiple clearable value-key="id" placeholder="请选择角色">
-              <el-option
-                v-for="item in roleList"
-                :key="item.id"
-                :label="item.name"
-                :value="item">
+          <el-form-item label="角色"
+                        prop="roles">
+            <el-select v-model="updateForm.roles"
+                       multiple
+                       clearable
+                       value-key="id"
+                       placeholder="请选择角色">
+              <el-option v-for="item in roleList"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-switch
-              v-model="updateForm.status"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              :active-value="1"
-              :inactive-value="2">
+          <el-form-item label="禁用状态"
+                        prop="disabledState">
+            <el-switch v-model="updateForm.disabledState"
+                       active-color="#FF4949"
+                       inactive-color="#C0CCDA"
+                       :active-value="1"
+                       :inactive-value="0">
             </el-switch>
           </el-form-item>
-          <el-form-item label="备注" prop="note">
-            <el-input
-              type="textarea"
-              resize="none"
-              :autosize="{ minRows: 2, maxRows: 4}"
-              placeholder="请输入备注"
-              v-model="updateForm.note">
+          <el-form-item label="备注"
+                        prop="remark">
+            <el-input type="textarea"
+                      resize="none"
+                      :autosize="{ minRows: 2, maxRows: 4}"
+                      placeholder="请输入备注"
+                      v-model="updateForm.remark">
             </el-input>
           </el-form-item>
         </el-form>
         <div class="drawerFooter">
           <el-button @click="updateVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updateUser()">确 定</el-button>
+          <el-button type="primary"
+                     @click="updateUser()">确 定</el-button>
         </div>
       </div>
     </el-drawer>
@@ -466,7 +517,7 @@ export default {
         callback()
       }
     }
-    var validateStatus = (rule, value, callback) => {
+    var validateDisabledState = (rule, value, callback) => {
       if (value === null) {
         callback(new Error('状态不能为空'))
       } else {
@@ -476,7 +527,7 @@ export default {
     return {
       searchKeyword: '',
       searchDept: null,
-      searchStatus: null,
+      searchDisabledState: null,
       deptList: [],
       roleList: [],
       addVisible: false,
@@ -485,15 +536,15 @@ export default {
         password: '',
         checkPassword: '',
         name: '',
-        avatar: '',
+        icon: '',
         sex: null,
         birthday: '',
         email: '',
-        phone: '',
+        tell: '',
         deptId: null,
         roles: [],
-        status: 1,
-        note: ''
+        disabledState: 0,
+        remark: ''
       },
       addRules: {
         account: [
@@ -514,8 +565,8 @@ export default {
         roles: [
           { required: true, validator: validateRoles, trigger: 'blur' }
         ],
-        status: [
-          { required: true, validator: validateStatus, trigger: 'blur' }
+        disabledState: [
+          { required: true, validator: validateDisabledState, trigger: 'blur' }
         ]
       },
       tableLoading: false,
@@ -533,8 +584,8 @@ export default {
         roles: [
           { required: true, validator: validateRoles, trigger: 'blur' }
         ],
-        status: [
-          { required: true, validator: validateStatus, trigger: 'blur' }
+        disabledState: [
+          { required: true, validator: validateDisabledState, trigger: 'blur' }
         ]
       }
     }
@@ -566,7 +617,7 @@ export default {
       pageList(this.pageNum, this.pageSize, {
         keyword: this.searchKeyword,
         deptId: this.searchDept,
-        status: this.searchStatus
+        disabledState: this.searchDisabledState
       }).then(res => {
         if (res) {
           this.userList = res.data.list
@@ -658,7 +709,7 @@ export default {
       return year + '年' + month + '月' + day + '日'
     },
     rowClassName ({ row, rowIndex }) {
-      if (row.status === 2) {
+      if (row.disabledState === 1) {
         return 'warning-row'
       }
       return ''
@@ -700,7 +751,7 @@ export default {
   margin-left: 10px;
 }
 
-.searchStatus {
+.searchDisabledState {
   flex: 0.1;
   margin-left: 10px;
 }
@@ -719,12 +770,12 @@ export default {
   margin-left: 10px;
 }
 
-.avatarBlock {
+.iconBlock {
   display: flex;
   justify-content: space-between;
 }
 
-.avatarUrl {
+.iconUrl {
   margin-left: 10px;
 }
 

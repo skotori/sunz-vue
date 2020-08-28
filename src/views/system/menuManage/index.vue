@@ -1,5 +1,5 @@
 <template>
-  <div>目录管理</div>
+  <div>菜单管理</div>
 </template>
 
 <script>
